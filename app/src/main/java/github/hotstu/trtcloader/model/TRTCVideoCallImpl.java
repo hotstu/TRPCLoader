@@ -627,7 +627,8 @@ public class TRTCVideoCallImpl implements ITRTCVideoCall {
         txBeautyManager.setBeautyLevel(6);
         // 进房前需要设置一下关键参数
         TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
-        encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_960_540;
+        //TODO 这里设置画质
+        encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_640_480;
         encParam.videoFps = 15;
         encParam.videoBitrate = 1000;
         encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
@@ -801,11 +802,13 @@ public class TRTCVideoCallImpl implements ITRTCVideoCall {
     }
 
     private static String generateCallID() {
+        //TODO generateCallID
         return "1";
         //return UUID.randomUUID().toString();
     }
 
     private static int generateRoomID() {
+        //TODO generateRoomID
         Random random = new Random();
         return 1;
         //return random.nextInt(Integer.MAX_VALUE);
