@@ -5,11 +5,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author songwd
- * @desc
- * @since 3/16/20
- */
+
 public class TIMManager {
 
     private static TIMManager sInstance;

@@ -1,7 +1,6 @@
 package github.hotstu.trtcloader;
 
-import android.text.TextUtils;
-import android.util.Base64;
+import android.annotation.SuppressLint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +14,7 @@ import java.util.zip.Deflater;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
 
 /*
  * Module:   GenerateTestUserSig
@@ -85,6 +85,15 @@ public class GenerateTestUserSig {
         return GenTLSSignature(SDKAPPID, userId, EXPIRETIME, null, SECRETKEY);
     }
 
+    @SuppressLint("NewApi")
+    public static String encodeToString(byte[] input, int flags) {
+        return java.util.Base64.getUrlEncoder().encodeToString(input);
+    }
+
+    @SuppressLint("NewApi")
+    public static byte[] decode(String str, int flags) {
+        return java.util.Base64.getUrlDecoder().decode(str);
+    }
     /**
      * 生成 tls 票据
      *
@@ -96,7 +105,7 @@ public class GenerateTestUserSig {
      * @return 如果出错，会返回为空，或者有异常打印，成功返回有效的票据
      */
     private static String GenTLSSignature(long sdkappid, String userId, long expire, byte[] userbuf, String priKeyContent) {
-        if (TextUtils.isEmpty(priKeyContent)) {
+        if (priKeyContent == null ||"".equals(priKeyContent)) {
             return "";
         }
         long       currTime = System.currentTimeMillis() / 1000;
@@ -113,7 +122,7 @@ public class GenerateTestUserSig {
 
         String base64UserBuf = null;
         if (null != userbuf) {
-            base64UserBuf = Base64.encodeToString(userbuf, Base64.NO_WRAP);
+            base64UserBuf = encodeToString(userbuf, 2);
             try {
                 sigDoc.put("TLS.userbuf", base64UserBuf);
             } catch (JSONException e) {
@@ -153,7 +162,7 @@ public class GenerateTestUserSig {
             SecretKeySpec keySpec = new SecretKeySpec(byteKey, "HmacSHA256");
             hmac.init(keySpec);
             byte[] byteSig = hmac.doFinal(contentToBeSigned.getBytes("UTF-8"));
-            return new String(Base64.encode(byteSig, Base64.NO_WRAP));
+            return encodeToString(byteSig, 2);
         } catch (UnsupportedEncodingException e) {
             return "";
         } catch (NoSuchAlgorithmException e) {
@@ -164,7 +173,7 @@ public class GenerateTestUserSig {
     }
 
     private static byte[] base64EncodeUrl(byte[] input) {
-        byte[] base64 = new String(Base64.encode(input, Base64.NO_WRAP)).getBytes();
+        byte[] base64 = encodeToString(input, 2).getBytes();
         for (int i = 0; i < base64.length; ++i)
             switch (base64[i]) {
                 case '+':
